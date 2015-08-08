@@ -1,0 +1,15 @@
+\url{http://www.vlfeat.org/matconvnet/}
+\cite{arXiv:1412.4564}
+
+\begin{itemize}
+ \item CPU / GPU
+ \item Computation times
+ \item What is coded for GPU? Where is the big computational improvement of GPU implementation? (A priori convolutions = bottleneck). 
+ \item How are convolutions implemented (matricial computation)?
+ \item MatLab interface / CUDA + C++
+ \item Organization: blocks. To each computational block corresponds a MatLab function. 
+ \item If a function does not exist, it can easily be defined by the user. Requirements: forward and backward formulations. Then, it is just another 
+block in the backpropagation chain. 
+ \item dropout implemented as a layer
+ \item 
+\end{itemize}

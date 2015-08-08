@@ -1,0 +1,145 @@
+% Template for ICIP-2015 paper; to be used with:
+%          spconf.sty  - ICASSP/ICIP LaTeX style file, and
+%          IEEEbib.bst - IEEE bibliography style file.
+% --------------------------------------------------------------------------
+\documentclass{report}
+\usepackage{amsmath,graphicx}
+\usepackage{color}
+\usepackage{pict2e}
+\usepackage{dsfont}
+\usepackage{stmaryrd}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{geometry}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+% \usepackage{pdfpages}
+
+\usepackage[linktoc=all]{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\geometry{
+a4paper,
+total={210mm,297mm},
+left=25mm,
+right=25mm,
+top=25mm,
+bottom=25mm,
+}
+
+
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+
+% Title.
+% ------
+\title{Convolutional Neural Networks - a brief introduction}
+\author{Michael BLOT, Thibaut DURAND, Marion CHEVALIER}
+\date{June 2015}
+
+\pagestyle{headings}
+
+%
+%\name{M. Chevalier$^{(1,2)}$, N. Thome$^{(1)}$, M. Cord$^{(1)}$, J. Fournier$^{(2)}$, G. Henaff$^{(2)}$, E. Dusch$^{(2)}$}
+%\address{(1) Sorbonne universites, UPMC Univ Paris 06, UMR 7606, LIP6, F-75005, Paris, France\\
+%	 (2) Thales Optronique S.A.S., 2 avenue Gay-Lussac, 78990 Elancourt, France}
+%
+%
+%\setlength{\belowcaptionskip}{-50cm}
+\begin{document}
+%\ninept
+%
+\maketitle
+
+\tableofcontents
+
+
+
+
+%===========================================================
+\chapter{Introduction}
+
+\section{What is a CNN?}
+\input{introduction}
+
+\section{Network training}
+\input{backprop}
+
+
+
+%===========================================================
+\chapter{Architecture blocks}
+\label{blocks}
+
+\input{intro_blocks}
+
+\section{Convolutions}
+\input{convolutions}
+
+\section{Pooling}
+\input{pooling}
+
+\section{Activation functions}
+\input{activations}
+
+\section{Normalization functions}
+\input{normalization}
+
+\section{Classification and loss functions}
+\input{classif_loss}
+
+\section{A few training tricks}
+\input{training}
+
+
+%============================================================
+\chapter{Image recognition state of the art CNN architectures}
+\input{SoA_archi}
+
+
+
+%===========================================================
+\chapter{Deep nets libraries}
+\label{lib}
+
+\section{MatConvNet}
+\input{MatConvNet}
+
+\section{Torch}
+\input{Torch}
+
+\section{Caffe}
+\input{Caffe}
+
+
+
+
+
+
+
+
+
+% To start a new column (but not a new page) and help balance the last-page
+% column length use \vfill\pagebreak.
+% -------------------------------------------------------------------------
+%\vfill
+%\pagebreak
+	
+% References should be produced using the bibtex program from suitable
+% BiBTeX files (here: refs). The IEEEbib.bst bibliography
+% style file from IEEE produces unsorted bibliography list.
+% -------------------------------------------------------------------------
+\bibliographystyle{IEEEbib}
+\bibliography{egbib}
+
+\end{document}

@@ -1,0 +1,388 @@
+These networks are state of the art examples of what can be implemented on different datasets. 
+
+In table \ref{table:summary_SoA_nets}, we present an overview of each standard network, then we present all described nets in more details. 
+
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l|l||c||c|c|c|}
+  \hline
+  &                                          &                           & \multicolumn{3}{c|}{Number of weights}        \\
+  \cline{4-6}
+  & Net                                      & Input image size          & Convolutions & Fully-connected & Total       \\
+  \hline
+  \multirow{3}{*}{Small}
+  & LeNet \cite{MNIST}                       & $28 \times 28 \times 1$   & 25,500       & 405,000         & 430,500     \\ 
+  & CIFAR-10 \cite{CIFAR}                    & $32 \times 32 \times 3$   & 79,200       & 66,176          & 145,376     \\
+  & LR-CNN \cite{Chevalier15}                & $32 \times 32 \times 3$   &  &  & \\
+  \hline
+  \multirow{3}{*}{Medium}
+  & AlexNet \cite{Krizhevsky12}              & $227 \times 227 \times 3$ & 2,332,704    & 58,621,952      & 60,954,656 \\
+  & Overfeat large \cite{Sermanet14overfeat} & $221 \times 221 \times 3$ &  &  & \\
+  & CNN-M \cite{Chatfield14}                 & $224 \times 224 \times 3$ & 6,526,752 & 96,370,688 & 102,897,440 \\
+  \hline
+  \multirow{2}{*}{Large}
+  & Very deep                                &                           &  &  & \\ 
+  & GoogLeNet                                &                           &  &  & \\
+  \hline
+ \end{tabular}
+ \caption{State of the art CNN architectures - summary.}
+ \label{table:summary_SoA_nets}
+\end{center}
+\end{table}
+
+
+
+
+
+
+
+
+
+\section{Small networks}
+
+\subsection{LeNet (on MNIST)}
+
+LeNet architecture \cite{MNIST}, described in table \ref{table:LeNet} was initially designed for MNIST image classification, and contains a total of 
+\textbf{430,500} learnable weights (25,500 in the convolutional part, 405,000 in the fully-connected part). 
+
+MNIST contains 70,000 images of handwritten digits. These images belong to 10 classes (``0'', ``1'' ... ``9'') and have a size $28 \times 
+28 \times 1$ (greyscale images). 
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name  & Input                          & Details                                 & Stride & Padding & Output                 \\
+   \hline
+   \hline
+   conv1       & $28 \times 28 \times 1$ images & 20 filters $5 \times 5 \times 1$        & 1      & 0       & 20 maps $24 \times 24$ \\
+   pool1       & 20 maps $24 \times 24$         & max on $[2, 2]$ regions                 & 2      & 0       & 20 maps $12 \times 12$ \\
+   \hline
+   conv2       & 20 maps $12 \times 12$         & 50 filters $5 \times 5 \times 20$       & 1      & 0       & 50 maps $8 \times 8$   \\
+   pool2       & 50 maps $8 \times 8$           & max on $[2, 2]$ regions                 & 2      & 0       & 50 maps $4 \times 4$   \\
+   \hline
+   fc3         & 50 maps $4 \times 4$           & 500 neurons                             &        &         & vector of size 500     \\
+   relu3       & vector of size 500             &                                         &        &         & vector of size 500     \\
+   fc4         & vector of size 500             & 10 neurons                              &        &         & vector of size 10      \\
+   \hline
+   sotfmax     & vector of size 10              &                                         &        &         & vector of size 10      \\
+   log-loss    & vector of size 10              & only for training                       &        &         & loss value             \\
+   \hline
+ \end{tabular}
+ \caption{Architecture example on MNIST (architecture: LeNet \cite{MNIST}). Total weights: 430,500.}
+ \label{table:LeNet}
+\end{center}
+\end{table} 
+
+
+
+
+\subsection{Standard architecture on CIFAR}
+
+The architecture described in table \ref{table:CIFAR} is a standard architecture used on CIFAR-10 image classification, and contains a total of 
+\textbf{145,376} learnable weights (79,200 in the convolutional part, 66,176 in the fully-connected part). 
+
+CIFAR \cite{CIFAR} contains  images centered on objects. These images belong to 10 classes (CIFAR-10) or 100 classes (CIFAR-100) and have a size $32 
+\times 32 \times 3$. 
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                          & Details                                 & Stride & Padding   & Output                 \\
+   \hline
+   \hline
+   conv1      & $32 \times 32 \times 3$ images & 32 filters $5 \times 5 \times 3$        & 1      & [2,2;2,2] & 32 maps $32 \times 32$ \\
+   pool1      & 32 maps $32 \times 32$         & max on $[3, 3]$ regions                 & 2      & [0,1;0,1] & 32 maps $16 \times 16$ \\
+   relu1      & 32 maps $16 \times 16$         &                                         &        &           & 32 maps $16 \times 16$ \\
+   \hline
+   conv2      & 32 maps $16 \times 16$         & 32 filters $5 \times 5 \times 32$       & 1      & [2,2;2,2] & 32 maps $16 \times 16$ \\
+   relu2      & 32 maps $16 \times 16$         &                                         &        &           & 32 maps $16 \times 16$ \\
+   pool2      & 32 maps $16 \times 16$         & average on $[3, 3]$ regions             & 2      & [0,1;0,1] & 32 maps $8 \times 8$   \\
+   \hline
+   conv3      & 32 maps $8 \times 8$           & 64 filters $5 \times 5 \times 32$       & 1      & [2,2;2,2] & 64 maps $8 \times 8$   \\
+   relu3      & 64 maps $8 \times 8$           &                                         &        &           & 64 maps $8 \times 8$   \\
+   pool3      & 64 maps $8 \times 8$           & average on $[3, 3]$ regions             & 2      & [0,1;0,1] & 64 maps $4 \times 4$   \\
+   \hline
+   fc4        & 64 maps $4 \times 4$           & 64 neurons                              &        &           & vector of size 64      \\
+   fc5        & vector of size 64              & 10 neurons                              &        &           & vector of size 10      \\
+   \hline
+   sotfmax     & vector of size 10              &                                         &        &         & vector of size 10      \\
+   log-loss    & vector of size 10              & only for training                       &        &         & loss value             \\
+   \hline
+ \end{tabular}
+ \caption{Architecture example on CIFAR-10 \cite{CIFAR}. Total weights: 145,376.}
+ \label{table:CIFAR}
+\end{center}
+\end{table} 
+
+
+
+
+
+
+
+\subsection{LR-CNN}
+
+This architecture was proposed in \cite{Chevalier15}. Adapted from the historic AlexNet-like networks, this architecture is designed to recognize 
+low resolution images in a fine-grained context. More precisely, this structure has been tested on FGVC-Aircraft images \cite{maji13fine-grained} 
+resized to a $32 \times 32 \times 3$ input size. 
+This dataset contains 10,000 images belonging to 100 aircraft classes. 
+
+The proposed architecture contains a total of  weights ( in the convolutional part, in the fully-connected part).
+
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                          & Details                                 & Stride & Padding   & Output                 \\
+   \hline
+   \hline
+   conv1      & $32 \times 32 \times 3$ images & 64 filters $5 \times 5 \times 3$        & 1      & [2,2;2,2] &  \\
+   relu1      &                                &                                         &        &           &  \\
+   norm1      &                                &                                         &        &           &  \\
+   pool1      &                                & max on $[3,3]$ regions                  & 2      & [1,1;1,1] &  \\
+   \hline
+   conv2      &                                & 64 filters $5 \times 5 \times 64$       & 1      & [2,2;2,2] &  \\
+   relu2      &                                &                                         &        &           &  \\
+   pool2      &                                & max on $[3,3]$ regions                  & 2      & [1,1;1,1] &  \\
+   \hline
+   conv3      &                                & 64 filters $3 \times 3 \times 64$       & 1      & 0         &  \\
+   relu3      &                                &                                         &        &           &  \\
+   pool3      &                                & max on $[3,3]$ regions                  & 2      & [1,1;1,1] &  \\
+   \hline
+   fc4        & 64 maps of size $3 \times 3$   & 128 neurons                             &        &           & vector of size 128 \\
+   relu4      & vector of size 128             &                                         &        &           & vector of size 128 \\
+   \hline
+   fc5        & vector of size 128             & 100 neurons                             &        &           & vector of size 100 \\
+   softmax    & vector of size 100             &                                         &        &           & vector of size 100 \\
+   log-loss   & vector of size 100             & only for training                       &        &           & loss value         \\
+ \end{tabular}
+ \caption{LR-CNN architecture \cite{Chevalier15}. Total weights: .}
+ \label{table:LR-CNN}
+\end{center}
+\end{table} 
+
+
+
+
+
+
+
+%===========================================================================================================================================
+
+
+\section{Medium networks}
+
+
+
+\subsection{AlexNet (Krizhevsky)}
+\label{AlexNet}
+
+With their paper \cite{Krizhevsky12}, Krizhevsky et al. have achieved tremendous performances on the ILSVRC12 image classification challenge. This 
+paper has definitely caused a re-orientation of all image recognition works towards Convolutional Neural Networks. 
+
+This networks contains a total of \textbf{60,954,656} learnable weights (2,332,704 in the convolutional part, 58,621,952 in the fully-connected part).
+
+In table \ref{table:AlexNet}, we describe the architecture in detail. 
+It should be noted that, because of the limited computational material at the time of the publication, the network had to be learned in two threads. 
+More precisely, we can see in table \ref{table:AlexNet} that for layers conv4 and conv5, the depth of the filters is \textit{half} the depth of the 
+input maps. Indeed, half of those filters were learned on a first GPU, and the other half were learned on a second GPU. Both threads converge then so 
+that the fully-connected layers are learned jointly. For more details, see \cite{Krizhevsky12}. 
+
+
+
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                            & Details                                 & Stride & Padding   & Output                   \\
+   \hline
+   \hline
+   conv1      & $227 \times 227 \times 3$ images & 96 filters $11 \times 11 \times 3$      & 4      & 0         & 96 maps $55 \times 55$   \\
+   relu1      & 96 maps $55 \times 55$           &                                         &        &           & 96 maps $55 \times 55$   \\
+   pool1      & 96 maps $55 \times 55$           & max on $[3,3]$ regions                  & 2      & 0         & 96 maps $27 \times 27$   \\
+   norm1      & 96 maps $27 \times 27$           & contrast normalization                  &        &           & 96 maps $27 \times 27$   \\
+   \hline
+   conv2      & 96 maps $27 \times 27$           & 256 filters $5 \times 5 \times 48$      & 1      & [2,2;2,2] & 256 maps $27 \times 27$  \\
+   relu2      & 256 maps $27 \times 27$          &                                         &        &           & 256 maps $27 \times 27$  \\
+   pool2      & 256 maps $27 \times 27$          & max on $[3,3]$ regions                  & 2      & 0         & 256 maps $13 \times 13$  \\
+   norm2      & 256 maps $13 \times 13$          & contrast normalization                  &        &           & 256 maps $13 \times 13$  \\
+   \hline
+   conv3      & 256 maps $13 \times 13$          & 384 filters $3 \times 3 \times 256$     & 1      & [1,1;1,1] & 384 maps $13 \times 13$  \\
+   relu3      & 384 maps $13 \times 13$          &                                         &        &           & 384 maps $13 \times 13$  \\
+   \hline
+   conv4      & 384 maps $13 \times 13$          & 384 filters $3 \times 3 \times 192$     & 1      & [1,1;1,1] & 384 maps $13 \times 13$  \\
+   relu4      & 384 maps $13 \times 13$          &                                         &        &           & 384 maps $13 \times 13$  \\
+   \hline
+   conv5      & 384 maps $13 \times 13$          & 256 filters $3 \times 3 \times 192$     & 1      & [1,1;1,1] & 256 maps $13 \times 13$  \\
+   relu5      & 256 maps $13 \times 13$          &                                         &        &           & 256 maps $13 \times 13$  \\
+   pool5      & 256 maps $13 \times 13$          & max on $[3,3]$ regions                  & 2      & 0         & 256 maps $6 \times 6$    \\
+   \hline
+   fc6        & 512 maps $6 \times 6$            & 4,096 neurons                           &        &           & vector of size 4,096     \\
+   relu6      & vector of size 4,096             &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc7        & vector of size 4,096             & 4,096 neurons                           &        &           & vector of size 4,096     \\
+   relu7      & vector of size 4,096             &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc8        & vector of size 4,096             & 1,000 neurons                           &        &           & vector of size 1,000     \\
+   softmax    & vector of size 1,000             &                                         &        &           & vector of size 1,000     \\
+   log-loss   & vector of size 1,000             & only for training                       &        &           & loss value               \\
+   \hline 
+ \end{tabular}
+ \caption{AlexNet architecture \cite{Krizhevsky12}. Total weights: 60,954,656.}
+ \label{table:AlexNet}
+\end{center}
+\end{table} 
+
+
+
+
+
+
+
+\subsection{Overfeat}
+
+Overfeat is a deep architecture proposed in \cite{Sermanet14overfeat} to classify images from various standard datasets (PASCALVOC, ImageNet...). The 
+structure is described in table \ref{table:Overfeat}. The net contains a total of \textbf{} learnable weights ( in the convolutional part,  in 
+the fully-connected part).
+
+Overfeat can easily be used as a feature extractor, since the pretrained weights are available online\footnote{Overfeat webpage: 
+\url{http://cilvr.nyu.edu/doku.php?id=software:overfeat:start}}. 
+Two variants of architectures have been proposed: a fast version (quite fast to compute but not the most accurate) and a large version (the most 
+accurate but the slowest version). Here, we detail the large version. 
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                            & Details                                 & Stride & Padding   & Output                   \\
+   \hline
+   \hline
+   conv1      & $221 \times 221 \times 3$ images & 96 filters $7 \times 7$                 & 2      &           & 96 maps                  \\
+   relu1      &                                  &                                         &        &           &                          \\
+   pool1      &                                  & max on $[3,3]$ regions                  & 3      & 0         & 96 maps $36 \times 36$   \\
+   \hline
+   conv2      & 96 maps $36 \times 36$           & 256 filters $7 \times 7$                & 1      &           & 256 maps                 \\
+   relu2      &                                  &                                         &        &           &                          \\
+   pool2      &                                  & max on $[2,2]$ regions                  & 2      & 0         & 256 maps $15 \times 15$  \\
+   \hline
+   conv3      & 256 maps $15 \times 15$          & 512 filters $3 \times 3$                & 1      & [1,1;1,1] &                          \\
+   relu3      &                                  &                                         &        &           & 512 maps $15 \times 15$  \\
+   \hline
+   conv4      & 512 maps $15 \times 15$          & 512 filters $3 \times 3$                & 1      & [1,1;1,1] &                          \\
+   relu4      &                                  &                                         &        &           & 512 maps $15 \times 15$  \\
+   \hline
+   conv5      & 512 maps $15 \times 15$          & 1,024 filters $3 \times 3$              & 1      & [1,1;1,1] &                          \\
+   relu5      &                                  &                                         &        &           & 1,024 maps $15 \times 15$\\
+   \hline
+   conv6      & 1,024 maps $15 \times 15$        & 1,024 filters $3 \times 3$              & 1      & [1,1;1,1] &                          \\
+   relu6      &                                  &                                         &        &           &                          \\
+   pool6      &                                  & max on $[3,3]$ regions                  & 3      & 0         & 1,024 maps $5 \times 5$  \\
+   \hline     
+   fc7        & 1,024 maps $5 \times 5$          & 4,096 filters $5 \times 5$              & 1      &           & vector of size 4,096     \\
+   relu7      &                                  &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc8        & vector of size 4,096             & 4,096 neurons                           &        &           & vector of size 4,096     \\ 
+   relu8      & vector of size 4,096             &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc9        & vector of size 4,096             & 1,000 neurons                           &        &           & vector of size 1,000     \\
+   softmax    & vector of size 1,000             &                                         &        &           & vector of size 1,000     \\
+   ????       & vector of size 1,000             &                                         &        &           & loss value               \\
+   \hline
+ \end{tabular}
+ \caption{Overfeat (large) architecture \cite{Sermanet14overfeat}. Total weights: .}
+ \label{table:Overfeat}
+\end{center}
+\end{table} 
+
+
+
+
+
+\subsection{CNN-M (Chatfield)}
+
+In their paper \cite{Chatfield14}, Chatfield et al. propose a study comparing Fisher Vectors representations to deep representations on 
+PASCALVOC2007. In this context, they present three architectures: CNN-F (fast but not the most accurate), CNN-M (medium, quite accurate), CNN-S 
+(slow but not much more accurate than CNN-M). In this report, we describe the CNN-M architecture (which is used throughout \cite{Chatfield14} as 
+the reference method). 
+
+This network contains \textbf{102,897,440} learnable weights (6,526,752 in the convolutional part, 96,370,688 in the fully-connected part). It is 
+worth noticing that the authors propose ``lighter'' versions of their network by reducing the size of fc7: CNN-M-2048 has 2048 neurons in fc7 (total 
+weights: 92,460,832), CNN-M-1024 has 1024 neurons in fc7 (total weights: 87,242,528), CNN-M-128 has 128 neurons in fc7 (total weights: 82,676,512). 
+CNN-M has however been widely used for comparative studies in other works \cite{}. 
+
+This architecture was designed to classify ImageNet ILSVRC12 images \cite{Deng09ImageNet}: these 1,2 million images belong to 1,000 classes. 
+The weights of this network have been learned on ILSVRC12 data and are online available\footnote{CNN-M pretrained weigths: 
+\url{http://www.vlfeat.org/matconvnet/pretrained/}}.
+
+It should be noted that CNN-M is quite similar to AlexNet (described in section \ref{AlexNet}). However, CNN-M is much larger (larger filter banks in 
+conv3, conv4, conv5) and reduces much less available information in the first layers (in conv1, stride 2 for CNN-M vs. stride 4 in AlexNet).
+
+
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                            & Details                                 & Stride & Padding   & Output                   \\
+   \hline
+   \hline
+   conv1      & $224 \times 224 \times 3$ images & 96 filters $7 \times 7 \times 3$        & 2      & 0         & 96 maps $109 \times 109$ \\
+   relu1      & 96 maps $109 \times 109$         &                                         &        &           & 96 maps $109 \times 109$ \\
+   norm1      & 96 maps $109 \times 109$         & contrast normalization                  &        &           & 96 maps $109 \times 109$ \\
+   pool1      & 96 maps $109 \times 109$         & max on $[3,3]$ regions                  & 2      & 0         & 96 maps $54 \times 54$   \\
+   \hline
+   conv2      & 96 maps $54 \times 54$           & 256 filters $5 \times 5 \times 96$      & 2      & [1,1;1,1] & 256 maps $26 \times 26$  \\
+   relu2      & 256 maps $26 \times 26$          &                                         &        &           & 256 maps $26 \times 26$  \\
+   norm2      & 256 maps $26 \times 26$          & contrast normalization                  &        &           & 256 maps $26 \times 26$  \\
+   pool2      & 256 maps $26 \times 26$          & max on $[3,3]$ regions                  & 2      & [0,1;0,1] & 256 maps $13 \times 13$  \\
+   \hline
+   conv3      & 256 maps $13 \times 13$          & 512 filters $3 \times 3 \times 256$     & 1      & [1,1;1,1] & 512 maps $13 \times 13$  \\
+   relu3      & 512 maps $13 \times 13$          &                                         &        &           & 512 maps $13 \times 13$  \\
+   \hline
+   conv4      & 512 maps $13 \times 13$          & 512 filters $3 \times 3 \times 256$     & 1      & [1,1;1,1] & 512 maps $13 \times 13$  \\
+   relu4      & 512 maps $13 \times 13$          &                                         &        &           & 512 maps $13 \times 13$  \\
+   \hline
+   conv5      & 512 maps $13 \times 13$          & 512 filters $3 \times 3 \times 256$     & 1      & [1,1;1,1] & 512 maps $13 \times 13$  \\
+   relu5      & 512 maps $13 \times 13$          &                                         &        &           & 512 maps $13 \times 13$  \\
+   pool5      & 512 maps $13 \times 13$          & max on $[3,3]$ regions                  & 2      & 0         & 512 maps $6 \times 6$    \\
+   \hline
+   fc6        & 512 maps $6 \times 6$            & 4,096 neurons                           &        &           & vector of size 4,096     \\
+   relu6      & vector of size 4,096             &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc7        & vector of size 4,096             & 4,096 neurons                           &        &           & vector of size 4,096     \\
+   relu7      & vector of size 4,096             &                                         &        &           & vector of size 4,096     \\
+   \hline
+   fc8        & vector of size 4,096             & 1,000 neurons                           &        &           & vector of size 1,000     \\
+   softmax    & vector of size 1,000             &                                         &        &           & vector of size 1,000     \\
+   log-loss   & vector of size 1,000             & only for training                       &        &           & loss value               \\
+   \hline 
+ \end{tabular}
+ \caption{CNN-M architecture \cite{Chatfield14}. Total weights: 102,897,440.}
+ \label{table:CIFAR}
+\end{center}
+\end{table} 
+
+
+
+
+
+
+
+
+
+%===========================================================================================================================================
+
+\section{Large networks}
+
+\subsection{Very deep (Zisserman)}
+
+\subsection{GoogLeNet}
+
+
+
+
+

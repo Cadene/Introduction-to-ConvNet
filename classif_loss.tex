@@ -1,0 +1,413 @@
+\subsection{Prediction functions}
+
+
+
+\subsubsection{Softmax}
+Softmax prediction if rather suited for problems classifying mutually exclusive classes: it forces one class (the ground-truth label) to have a score 
+1, the other labels are forced to have a score of 0. 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {softmax}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x=   3cm, y= 0cm] {$\mathbf{y} = \begin{bmatrix}y_1\\ \vdots \\y_D\end{bmatrix}$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ y_k = \frac{e^{x_k}}{\sum_{k'=1}^D e^{x_{k'}}} \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dy_{k_2}}{dx_{k_1}} = \frac{e^{x_{k_2}}}{\sum_{k=1}^{D}e^{x_k}} \delta_{k_1=k_2} - \frac{e^{x_{k_1}+x_{k_2}}}{(\sum_{k=1}^{D}e^{x_k})^2} 
+\nonumber
+\end{align}
+
+
+
+
+
+\subsubsection{Sigmoid}
+Sigmoid prediction function is best suited for classification of images with multiple labels: each label gets a score in $[0, 1]$, while the sum is 
+not forced to a particular value.
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {sigmoid}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x=   3cm, y= 0cm] {$\mathbf{y} = \begin{bmatrix}y_1\\ \vdots \\y_D\end{bmatrix}$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:}
+\begin{align}
+ y_k = \frac{1}{1+e^{-x_k}} \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dy_{k_2}}{dx_{k_1}} = \frac{e^{-x_{k_2}}}{(1+e^{-x_{k_2}})^2} \delta_{k_1=k_2} \nonumber
+\end{align}
+
+
+
+
+
+
+%==============================================================================================================
+\subsection{Loss functions}
+
+
+\subsubsection{Classification losses}
+
+\paragraph{\textit{Log-loss}}
+Log-loss is generally used with a softmax prediction function. Only the predicted score of the \textit{ground-truth} class is taken into acount. 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {log-loss}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = - \ln(x_c) \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = -\frac{1}{x_c} \delta_{k=c} \nonumber
+\end{align}
+
+
+\paragraph{\textit{Cross-entropy}}
+Log-loss is generally used with a sigmoid prediction function.  
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {cross-entropy}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = - \sum_{k=1}^{D} l_k \ln(x_k) \nonumber
+\end{align}
+where $l_k$ is the ground-truth label of class $k$ for the input image. Here, it should be noticed that for a multiclass problem, the ground-truth labels must be adapted to the cross-entropy formulation. For instance, $l_k = 1$ if class $k$ is present in the input image, $-1$ otherwise. 
+
+\vspace{0.3cm}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = -l_k \frac{1}{x_k} \nonumber
+\end{align}
+
+
+
+
+\subsubsection{Regression losses}
+
+\paragraph{\textit{Laptev-style}}
+In \cite{Oquab15}, the authors propose a deep structure which is designed to:
+\begin{itemize}
+ \item localize the objects in the input image;
+ \item treat input images of variable sizes.  
+\end{itemize}
+To achieve these goals, they propose to replace the last fully-connected layers by convolutional blocks. By doing so, there is no need to enforce a fixed input image size: when a larger image than expected is fed to the network, instead of having one vector of $D$ scores for the whole image, the net provides a matrix of $n \times m$ vectors of $D$ scores, where $n \times m$ is the dimension of the output map of the last convolutional layers. In other words, the network can more or less be seen as a classifier used in a sliding window fashion.  
+
+However, the aim remains deciding a \textit{global} label for the whole image, while the previous modification only provides $n \times m$ score vectors. To make a decision over the whole image, a pooling layer is introduced after the last convolutional layers: the pooled score vector (average or max vector over the $n \times m$ spatial locations) is the global image score vector. 
+For more details, please refer to the article \cite{Oquab15}. 
+
+In order to train this modified network structure, they also provide an adapted loss formulation, which is as follows: 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {Oquab CVPR 2015}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:}
+\begin{align}
+ z = \sum_{k=1}^D \ln (1+e^{-l_k x_k}) \nonumber
+\end{align}
+where $l_k$ is the true label for the presence of object $k$ in the image:
+\begin{align}
+ \forall k = 1..D, \hspace{0.3cm} 
+    l_k &=+1 \hspace{0.3cm} \text{if object $k$ is present in the input image} \nonumber \\
+        &=-1 \hspace{0.3cm} \text{if object $k$ is absent from the input image} \nonumber
+\end{align}
+
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = \frac{l_k e^{-l_k x_k}}{1+e^{-l_k x_k}} \nonumber
+\end{align}
+
+
+
+
+
+
+%==============================================================================================================
+\subsection{Computational tricks}
+
+\subsubsection{Softmax log-loss combination}
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {softmax log-loss}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+  %
+Since softmax involves computing exponentials, the formulation of the ``softmax + log-loss'' can be simplified in order to lighten computational 
+cost. 
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = -x_c + \ln( \sum_{k=1}^D e^{x_k} ) \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = -\delta_{k=c} + \frac{e^{x_k}}{\sum_{k'=1}^D e^{x_{k'}}} \nonumber
+\end{align}
+
+
+
+
+\subsubsection{Avoiding computational errors in exponentials}
+
+For the softmax, we need to compute exponentials of matrices. To avoid computational errors, a normalization trick can be used for 
+softmax and softmax + log-loss. This normalization is used in MatConvNet. 
+For instance, in softmax + log-loss, 
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+  z = -x_c + x_{max} + \ln(\sum_{k=1}^D e^{x_k-x_{max}}) \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+  \frac{dz}{dx_k} = -\delta_{k=c} + \frac{e^{x_k-x_{max}}}{\sum_{k'=1}^D e^{x_{k'}-x_{max}}} \nonumber
+\end{align}
+  
+
+
+
+
+
+
+%==============================================================================================================
+
+\subsection{Privileged information integrated into classif and loss function}
+
+\subsubsection{What is privileged information?}
+
+
+\subsubsection{How is privileged information interpreted?}
+``Difficulty level'' of the input of interest.\\
+Assumption: if an example is easy to classify considering privileged information, then it has to be easy to classify considering common information.
+If it is hard to classify considering privileged information, then forcing common classifier to classify it well is a lost cause. Besides, if it is 
+difficult in the privileged space, the input example might be an outlier: if so, it would be misleading to force the common classifier to classify it 
+well. 
+
+Difficulty level: corresponds to the classification score in the privileged space. 
+
+
+
+\subsubsection{Log-loss+}
+
+Here, $\rho$ is a scalar. It is specific to each input image. It is computed as follows:
+
+\begin{align}
+ \rho = \langle w_c, x^* \rangle - \max_{k \neq c} \langle w_k, x^* \rangle \nonumber \\
+ \rho = \max(\min(\rho, \tau_{max}), \tau_{min}) \nonumber
+\end{align}
+
+The $\rho$ is specific to the input image value, and is then integrated in the loss function as follows: 
+
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {softmax log-loss+}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    \pgftext[base, x=   0cm, y=-1cm] {$\rho$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    \draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = -\rho x_c + \rho \ln( \sum_{k=1}^D e^{x_k} ) \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = -\rho \delta_{k=c} + \rho \frac{e^{x_k}}{\sum_{k'=1}^D e^{x_{k'}}} \nonumber
+\end{align}
+
+
+
+
+
+\subsubsection{Softmax+}
+
+Here, $\rho$ is a vector. It is specific to each input image. It is computed as follows:
+
+\begin{align}
+\forall k = 1..D, \hspace{0.2cm}
+ &\rho_k = \langle w_k, x^* \rangle \nonumber \\
+ &\rho_k = \max(\min(\rho_k, \tau_{max}), \tau_{min}) \nonumber
+\end{align}
+
+The $\rho$ is specific to the input image value, and is then integrated in the loss function as follows: 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {softmax log-loss+}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    \pgftext[base, x=   0cm, y=-1cm] {$\rho$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    \draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = -\ln(\rho_c) - x_c + \ln( \sum_{k=1}^D \rho_k e^{x_k} ) \nonumber
+\end{align}
+
+\noindent
+\underline{Backward:}
+\begin{align}
+ \frac{dz}{dx_k} = -\delta_{k=c} + \frac{\rho_k e^{x_k}}{\sum_{k'=1}^D \rho_{k'} e^{x_{k'}}} \nonumber
+\end{align}
+
+
+
+
+
+\subsubsection{Loss Inequality Regularization: another approach from the literature}
+
+In \cite{WangCVPR15hiddeninfo}, the authors propose another approach to integrate privileged information into the classification scheme. They propose a framework in which the privileged information is a model for the common information. In other words, the classifier in the common space is forced to be as good as the classifier in the privileged space, however \textit{the classifier in the common space is not allowed to be better than the classifier in the privileged space}. 
+This paradigm forces the classifier to be quite efficient, while avoiding overfitting to the outliers. 
+
+For each input image, the loss is computed as follows: 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {LIR}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x= 2.5cm, y= 0cm] {$z$}; 
+    \pgftext[base, x=   0cm, y=-1cm] {$\mathbf{x^*}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    \draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+\underline{Forward:} 
+\begin{align}
+ z = l(\mathbf{x}) + \eta l(\mathbf{x^*}) + \gamma [ l(\mathbf{x^*}) - l(\mathbf{x}) ]_+ \nonumber 
+\end{align}
+where $\eta$ and $\gamma$ are two hyper parameters, $[.]_+ = max(0,.)$ and $l$ is a predetermined loss function. 
+
+NB: regularization terms are present in the original formulation of \cite{WangCVPR15hiddeninfo}. In the case of a CNN, no parameter is learned in the classification and loss layers, thus no regularization term is needed. 
+
+\vspace{0.3cm}
+
+\noindent
+\underline{Backward:} 
+
+\vspace{0.3cm}
+
+{\color{red}Although this loss formulation is differentiable as soon as the loss $l$ is piecewise differentiable, deriving this function with respect to each $x_k$ would not lead to take into account any privileged information: 
+\begin{align}
+ \frac{dz}{dx_k} &= (1-\gamma) \frac{dl}{dx_k}(\mathbf{x})  &  \text{if}& \hspace{0.3cm} l(x^*) > l(x) \nonumber \\
+                 &= \frac{dl}{dx_k}(\mathbf{x})             &  \text{if}& \hspace{0.3cm} l(x^*) \leq l(x) \nonumber
+\end{align}
+
+In the classical formulation, the quantity $\frac{dz}{dx_k} = \frac{dl}{dx_k}(\mathbf{x})$ is backpropagated.
+Here, this quantity is backpropagated only when the classifier in the privileged space performs better than the classifier in the common space. 
+If the cassifier in the common space is the best, a \textit{lesser} quantity $\frac{dz}{dx_k} = (1-\gamma) \frac{dl}{dx_k}(\mathbf{x})$ is backpropagated.
+This observation is totally in contradiction with the philosophy of this approach: since we want to penalize an overfitting classifier (\textit{i.e.} when $l(x) < l(x^*)$), the backpropagated quantity should be higher when $l(x) < l(x^*)$.
+
+Moreover, the backpropagated value only depends on a \textit{condition} over the values $l(x)$ and $l(x^*)$. Since $\gamma$ is a hyper-parameter, the backpropagated value is not adapted to each example: it does not fully exploit the privileged information. 
+
+For both these reasons, this formulation does not seem adapted to a CNN training. 
+} 
+
+
+
+
+
+
+
+
+

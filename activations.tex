@@ -1,0 +1,34 @@
+\subsubsection{ReLU}
+
+This activation function, denoted as Rectified Linear Units, introduces a non linearity into the neural net. 
+
+  \begin{center}
+  \begin{tikzpicture}
+    \pgftext[base, x=   0cm, y= 0cm] {ReLU}; 
+    \pgftext[base, x=  -3cm, y= 0cm] {$\mathbf{x} = \begin{bmatrix}x_1\\ \vdots \\x_D\end{bmatrix}$}; 
+    \pgftext[base, x=   3cm, y= 0cm] {$\mathbf{y} = \begin{bmatrix}y_1\\ \vdots \\y_D\end{bmatrix}$}; 
+    %\pgftext[base, x=   0cm, y=-1cm] {$\mathbf{w}$}; 
+    \draw[black,thick] (-1.6cm,-0.3cm) rectangle (1.6cm,0.5cm); 
+    \draw[->] ( -2cm, 0.1cm) -- (-1.6cm, 0.1cm);
+    \draw[->] (1.6cm, 0.1cm) -- (   2cm, 0.1cm);
+    %\draw[->] (  0cm,-0.6cm) -- (   0cm,-0.3cm);
+  \end{tikzpicture}
+  \end{center}
+
+\noindent
+Forward:
+\begin{align}
+ y_k = \max(x_k, 0) \nonumber
+\end{align}
+
+\noindent
+Backward:
+\begin{align}
+ \frac{dy_{k_2}}{dx_{k_1}} &= \delta_{x_{k_1}>0} \hspace{0.3cm} \text{if} \hspace{0.3cm} k_1=k_2 \nonumber \\
+                           &= 0 \hspace{0.3cm} \text{otherwise} \nonumber
+\end{align}
+
+
+
+
+\subsubsection{Sigmoid}
