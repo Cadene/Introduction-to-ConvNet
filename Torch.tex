@@ -1,1 +1,22 @@
-{\color{red}Michael}
+{\color{red}Michael \& Remi}
+
+\url{http://torch.ch/}
+
+pros :
+\begin{itemize}
+ \item easy to shift from CPU to GPU
+ \item fast scripting language, LuaJIT
+ \item C/CUDA implementation
+ \item amazing interface to C, via LuaJIT
+ \item maximum flexibility in implementing complex neural network topologies (parallelize nets over CPUs and GPUs)
+ \item embeddable, with ports to iOS, Android and FPGA backends
+\end{itemize}
+
+cons : 
+\begin{itemize}
+  \item learning lua 
+  \item even with luarocks (package managing) still difficult to deal with libraries (for instance math.round doesn't exist, but math.ceil and math.floor do)
+  \item torch.optim, which contain adagrad, rmsprop, sgd, etc., is difficult to use and modify
+  \item great ml lib doesn't exist, for instance it's still hard to use a simple SVM
+\end{itemize}
+

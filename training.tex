@@ -9,3 +9,93 @@
  \end{itemize}
 
 \end{itemize}
+
+\section{Hyper Parameters}
+
+\subsection{Validation}
+
+The objective of learning is not to minimize training error, but to build a model able to generalize well. A good approximation is for sure to minimize the test error, but one should care to not overfit the later. As the process of learning a convnet usually takes three days for medium dataset and sometimes three weeks for the bigest one, people usually create one validation fold instead of five for a normal cross-validation. In fact, the amount of data is so high that it become less important to average the accuracy of 5 fold in order to be sure to not overfit the testing set.
+
+\subsection{Parameters Initilization}
+
+Biases can generally be initialized to zero, but weights need to be initialized carefully to break the symetry between filters of the same convolutional layer. 
+... blabla ... However in the case of RBMs?, a zero-mean Gaussian with a small standard deviation around 0.1 or 0.01 works well to initialize the weights.
+
+\subsection{Preprocessing}
+
+
+
+\subsection{Learning Rate}
+
+The learning rate is the most important hyperparameter to tune. The optimal learning rate is usually close to (by a factor of 2) the largest learning rate that does not cause divergence of the training criterion. A good heuristic for setting the learning rate is starting with a large learning rate (for instance 5e-1) and if the training criterion diverge, trying again with a 3 times smaller learning rate until no divergence is observed.
+
+Decreasing learning rate
+
+\subsection{Batch size}
+
+With a batch size B equal to 1 the ordinary stochastique (also called online) gradient descent is computed, while with B equal to the training set size this is the standard (also called batch) gradient descent. When B increases we can get more multiply-add operations per second by taking advantage of parallelism or efficient matrix-matrix multiplications. (en revanche) Smaller values of B may benefit from more exploration in parameter space and a form of regularization due to the noise injected in the gradient estimator. Also, stochastic (little mini-batch) gradient descent converges much faster than ordinary (batch) gradient descent. 
+Because random access to memory is expensive, a good approximation, is to visit the examples (or mini-batches) in a fixed order corresponding in their order in memory after a unique shuffling step (repeating the examples in the same order for each epoch). Nevertheless, faster convergence has been observed if the training set is shuffled before each epoch.
+B = 32 is a goodd default value, with values above 10 taking advantage of the speed-up of matrix-matrix products over matrix-vector products.
+
+\subsection{Epoch number}
+
+early stopping
+
+
+
+
+\section{Optimizer}
+
+SGD :
+learning rate
+learning rate decay
+momentum
+momentum nesterov
+weight decay L1 L2
+
+L-BFGS
+second order
+
+AdaGrad
+Duchi, J., Hazan, E., and Singer, Y. (2011). Adap- tive subgradient methods for online learning and stochastic optimization. Journal of Machine Learning Research.
+
+
+RMSProp (Hinton)
+
+Adadelta (Matthew Zeiler)
+Adam?
+
+
+
+\section{Reducing overfiting}
+Dropout
+Dropconnect
+Data augmentations
+
+\section{Improving accuracy}
+Model ensembles
+multi-scale
+
+\section{Improving speed and memory}
+size of a batch
+batch 3D Tensors versus 4D Tensors
+multi GPU
+
+\section{Hyperparameter searching algorithm}
+Grid search
+Random search (Bengio)
+
+\section{Pretrained models}
+Transfer learning
+convnet as feature extractor
+Fine-Tuning the Convnet
+dark Knowledge (Hinton) with model ensembles
+    
+\section{Other tips}
+Sanity checks
+monitoring the learning process
+how to learn properly without killing neurons
+benchmarking
+Random seeds
+Train on small dataset should be able to overfit to be sure gradient descent is well implemented 
+

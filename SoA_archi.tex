@@ -159,6 +159,7 @@ The proposed architecture contains a total of  weights ( in the convolutional pa
    fc5        & vector of size 128             & 100 neurons                             &        &           & vector of size 100 \\
    softmax    & vector of size 100             &                                         &        &           & vector of size 100 \\
    log-loss   & vector of size 100             & only for training                       &        &           & loss value         \\
+   \hline
  \end{tabular}
  \caption{LR-CNN architecture \cite{Chevalier15}. Total weights: .}
  \label{table:LR-CNN}
@@ -380,9 +381,74 @@ conv3, conv4, conv5) and reduces much less available information in the first la
 
 \subsection{Very deep (Zisserman)}
 
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{|l||l||l|c|c||l|}
+   \hline
+   Layer name & Input                          & Details                                 & Stride & Padding   & Output                 \\
+	\hline
+	\hline
+conv1	& $224 \times 224 \times 3$	& 64 filtres $3 \times 3 \times 3$	& 1	& 1	& $224 \times 224 \times 64$	\\
+relu1	&	&	&	&	&	\\
+conv2	& $224 \times 224 \times 64$	& 64 filtres $3 \times 3 \times 64$	& 1	& 1	& $224 \times 224 \times 64$	\\
+relu2	&	&	&	&	&	\\
+	\hline
+pool1	& $224 \times 224 \times 64$	& max on $[2,2]$ regions	& 2	&	& $112 \times 112 \times 64$	\\
+	\hline
+conv3	& $112 \times 112 \times 64$	& 128 filtres $3 \times 3 \times 64$	& 1	& 1	& $112 \times 112 \times 128$	\\
+relu3	&	&	&	&	&	\\
+conv4	& $112 \times 112 \times 128$	& 128 filtres $3 \times 3 \times 128$	& 1	& 1	& $112 \times 112 \times 128$	\\
+relu4	&	&	&	&	&	\\
+	\hline
+pool2	& $112 \times 112 \times 128$	& max on $[2,2]$ regions	& 2	&	& $56 \times 56 \times 128$	\\
+	\hline
+conv5	& $56 \times 56 \times 128$	& 256 filtres $3 \times 3 \times 128$	& 1	& 1	& $56 \times 56 \times 256$	\\
+relu5	&	&	&	&	&	\\
+conv6	& $56 \times 56 \times 256$	& 256 filtres $3 \times 3 \times 256$	& 1	& 1	& $56 \times 56 \times 256$	\\
+relu6	&	&	&	&	&	\\
+conv7	& $56 \times 56 \times 256$	& 256 filtres $3 \times 3 \times 256$	& 1	& 1	& $56 \times 56 \times 256$	\\
+relu7	&	&	&	&	&	\\
+conv8	& $56 \times 56 \times 256$	& 256 filtres $3 \times 3 \times 256$	& 1	& 1	& $56 \times 56 \times 256$	\\
+relu8	&	&	&	&	&	\\
+	\hline
+pool3	& $56 \times 56 \times 256$	& max on $[2,2]$ regions	& 2	&	& $28 \times 28 \times 256$	\\
+	\hline
+conv9	& $28 \times 28 \times 256$	& 512 filtres $3 \times 3 \times 256$	& 1	& 1	& $28 \times 28 \times 512$	\\
+relu9	&	&	&	&	&	\\
+conv10	& $28 \times 28 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $28 \times 28 \times 512$	\\
+relu10	&	&	&	&	&	\\
+conv11	& $28 \times 28 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $28 \times 28 \times 512$	\\
+relu11	&	&	&	&	&	\\
+conv12	& $28 \times 28 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $28 \times 28 \times 512$	\\
+relu12	&	&	&	&	&	\\
+	\hline
+pool4	& $28 \times 28 \times 512$	& max on $[2,2]$ regions	& 2	&	& $14 \times 14 \times 512$	\\
+	\hline
+conv13	& $14 \times 14 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $14 \times 14 \times 512$	\\
+relu13	&	&	&	&	&	\\
+conv14	& $14 \times 14 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $14 \times 14 \times 512$	\\
+relu14	&	&	&	&	&	\\
+conv15	& $14 \times 14 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $14 \times 14 \times 512$	\\
+relu15	&	&	&	&	&	\\
+conv16	& $14 \times 14 \times 512$	& 512 filtres $3 \times 3 \times 512$	& 1	& 1	& $14 \times 14 \times 512$	\\
+relu16	&	&	&	&	&	\\
+	\hline
+pool5	& $14 \times 14 \times 512$	& max on $[2,2]$ regions	& 2	&	& $7 \times 7 \times 512$	\\
+reshape	& $7 \times 7 \times 512$	& & & & $25088$	\\
+	\hline
+fc1	& 25088	& 	& 	& 	& 4096	\\
+relu17	&	&	&	&	&	\\
+fc2	& 4096	& 	& 	& 	& 4096	\\
+relu18	&	&	&	&	&	\\
+fc3	& 4096	& 	& 	& 	& 1000	\\
+relu19	&	&	&	&	&	\\
+	\hline
+softmax	& 1000	&	&	&	& 1000	\\
+    \hline
+ \end{tabular}
+ \caption{VeryDeep-E architecture \cite{Chevalier15}. Total weights: 144M.}
+ \label{table:LR-CNN}
+\end{center}
+\end{table} 
+
 \subsection{GoogLeNet}
-
-
-
-
-

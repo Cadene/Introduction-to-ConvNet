@@ -1,3 +1,22 @@
+\paragraph{Why using non-linear activation functions. }
+
+A non-linear activation function is needed between convolution layers (i.e. hidden layers) in order to get higher layer feature representation. In fact, in a single-layer neural network, we can think of the outputs $o$ as being the result of a given activation function $f$ applied to the dot product between the inputs $x$ and the weights $W$ of the layer. $o = f(W . x)$
+What we can observe in this case is that if we are using linear activation (thus, $f(x) = x$), then a two-layer network described by :
+$ o_1 = W_1 . x_1 $
+$ o_2 = W_2 . o_1 = W_2 . W_1 . x $
+can be replaced by a single-layer network with parameters $W_{12} = W_2 . W_1$, so stacking more than one linear layer is only going to improve the complexity of the network instead of its expressivity. This is not true when using a non-linear activation function.
+
+\subsubsection{Sigmoid}
+
+0..1
+
+\subsubsection{Hyperbolic Tangent}
+
+-1..1
+
+\subsubsection{Threshold}
+
+
 \subsubsection{ReLU}
 
 This activation function, denoted as Rectified Linear Units, introduces a non linearity into the neural net. 
@@ -15,6 +34,13 @@ This activation function, denoted as Rectified Linear Units, introduces a non li
   \end{tikzpicture}
   \end{center}
 
+\subsubsection{PReLU}
+
+http://arxiv.org/pdf/1502.01852v1.pdf
+
+
+
+
 \noindent
 Forward:
 \begin{align}
@@ -31,4 +57,4 @@ Backward:
 
 
 
-\subsubsection{Sigmoid}
+

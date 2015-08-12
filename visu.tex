@@ -1,0 +1,33 @@
+The most basic statistics that should be measured during training are error statistics. The average loss on the training set and test set and their evolution during training are very useful to monitor progress and differentiate overfitting from poor optimization. To make comparisons easier, it may be useful to compare neural networks during training in terms of their "age" by doing statistics on the number of updates made times mini-batch size B, i.e., when the gradient is not equal to zero.
+
+Another useful type of visualization is to display statistics (e.g., histogram, mean and std) of activations (inputs and oupts of non-linearities at each layer), activation gradients, parameters and parameter gradients, by groyps (e.g. different layers, biases vs weights) and across training iterations.
+For pratical exemples :
+Glorot, X. and Bengio, Y. (2010). Understanding the difficulty of training deep feedforward neural networks. In AISTATS’2010, pages 249–256.
+
+
+
+Layer Activations
+ killed neurons
+ 
+Conv/FC Filters
+
+Retrieving images that maximally activate a neuron
+
+Occluding parts of the image
+
+Visualizing the data gradient and friends
+Data Gradient
+DeconvNet
+Guided Backpropagation
+
+Reconstructing original images based on CNN Codes
+
+How much spatial information is preserved
+
+Plotting performance as a function of image attributes
+
+Comparing ConvNets to Human labelers
+What is important to train a net is to really understand the difficulty of the dataset.
+
+Fooling ConvNets
+Interesting but not usefull, human can also be fooled as a ConvNet
